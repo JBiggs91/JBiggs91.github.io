@@ -30,6 +30,38 @@
 
 	var addDo = function(item) {
 		var li = document.createElement('li');
+
+		li.addEventListener('dblclick', function(event) {
+			event.target.innerHTML = '<input type="checkbox" class="checkbox">' + '<input type="text" value="'+li.innerText+'">' + '<input type="hidden" id="up"><button>MoveUp</button>' + '<input type="hidden" id="down"><button>MoveDown</button>';
+
+			li.addEventListener('keypress', function(event) {
+
+				if(event.keyCode === 13) {
+					li.innerText = event.target.value;
+					li.innerHTML = '<input type="checkbox" class="checkbox">' + event.target.value + '<input type="hidden" id="up"><button>MoveUp</button>' + '<input type="hidden" id="down"><button>MoveDown</button>';
+							var check = li.children[0]
+					check.addEventListener('click', function(event) {
+						if (event.target.checked === true) {
+							event.target.parentNode.parentNode.removeChild(event.target.parentNode);
+							p.innerText = "You have " + ul.children.length + " tasks to complete.";
+						}
+					})
+
+					var moveUp = li.children[2]
+					moveUp.addEventListener('click', function(event) {
+						var previous = event.target.parentNode.previousSibling;
+						ul.insertBefore(event.target.parentNode, previous);	
+					})
+
+					var moveDown = li.children[4]
+					moveDown.addEventListener('click', function(event) {
+						var next = event.target.parentNode.nextSibling.nextSibling;
+						ul.insertBefore(event.target.parentNode, next);
+					})
+				}
+			})
+		})
+
 		li.innerText = item;
 		li.innerHTML = '<input type="checkbox" class="checkbox">' + item + '<input type="hidden" id="up"><button>MoveUp</button>' + '<input type="hidden" id="down"><button>MoveDown</button>';
 		ul.insertBefore(li, ul.children[0]);
@@ -57,25 +89,12 @@
 
 		p.innerText = "You have " + ul.children.length + " tasks to complete.";
 
-		li.addEventListener('dblclick', function(event) {
-			event.target.innerHTML = '<input type="text" value="'+li.innerText+'">';
-
-			li.addEventListener('keypress', function(event) {
-
-				if(event.keyCode === 13) {
-					li.innerText = event.target.value;
-				}
-			})
-		})
-
-
-
 	}
 
 	var input = document.getElementById('user-input');
 	input.addEventListener('keypress', function() {
 
-		if(event.keyCode == 13) {
+		if(event.keyCode === 13) {
 			var toDo = document.getElementById('user-input').value;
 			addDo(toDo);
 		}
